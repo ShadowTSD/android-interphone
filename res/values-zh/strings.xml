@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">对讲机</string>
+    <string name="settings_name">对讲机设置</string>
+    <string name="settings_label">设置</string>
+    <string name="settings_comm_name">对讲方式设置</string>
+    <string name="settings_comm_label">对讲方式</string>
+    <string name="set_cast_and_port">对讲类型和端口</string>
+    <string name="cast_type_title">对讲类型</string>
+    <string name="cast_type_summary">选择多少设备可以接收到音频数据.</string>
+    <string name="port_title">端口</string>
+    <string name="port_summary" />
+    <string name="port_default">8888</string>
+    <string name="set_ip_addr">IP地址</string>
+    <string name="broadcast_addr_title">广播地址</string>
+    <string name="broadcast_addr_summary">处于同一个网络的所有设备都会接收到音频数据.</string>
+    <string name="broadcast_addr_default">255.255.255.255</string>
+    <string name="multicast_addr_title">组播地址</string>
+    <string name="multicast_addr_summary">处于同一个网络且在同一广播地址段的设备都会接收到音频数据.</string>
+    <string name="multicast_addr_default">224.0.0.100</string>
+    <string name="unicast_addr_title">单播地址</string>
+    <string name="unicast_addr_summary">只有给定地址的设备才会接收到音频数据.</string>
+    <string name="unicast_addr_default">192.168.0.1</string>
+    <string name="settings_audio_name">音频设置</string>
+    <string name="settings_audio_label">音频</string>
+    <string name="use_speex_title">使用自带编解码器</string>
+    <string name="use_speex_on">关闭</string>
+    <string name="use_speex_off">打开</string>
+    <string name="speex_quality_title">编解码率</string>
+    <string name="speex_quality_summary" />
+    <string name="echo_title">回显</string>
+    <string name="echo_on">关闭</string>
+    <string name="echo_off">打开</string>
+    <string name="settings_reset_all_name">恢复设置</string>
+    <string name="settings_reset_all_label">恢复设置</string>
+    <string name="setting_reset_all_confirm">所有的设置都会恢复到默认值.</string>
+    <string name="network_error">网络错误</string>
+    <string name="local_ip_string">您当前局域网IP地址:</string>
+    <string name="localip_label">本机IP地址</string>
+    <string name="menu_help">使用说明</string>
+    <string name="menu_help_content">"使用说明：
+        
+1、按下按钮，对着手机说话，即可把数据传输给局域网内其他好友.
+2、放开按钮，只能接收消息
+3、用户可以通过菜单进行高级设置
+
+注意事项:
+
+1、本程序只能使用在无线局域网(WLAN)或者3G网内与其它用户进行通话"</string>
+</resources>

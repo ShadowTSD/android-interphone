@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <CheckBoxPreference android:title="@string/use_speex_title" android:key="use_speex" android:defaultValue="true" android:summaryOn="@string/use_speex_on" android:summaryOff="@string/use_speex_off" />
+    <ListPreference android:entries="@array/speex_quality" android:title="@string/speex_quality_title" android:key="speex_quality" android:summary="@string/speex_quality_summary" android:dependency="use_speex" android:defaultValue="2" android:entryValues="@array/speex_quality_values" />
+    <CheckBoxPreference android:title="@string/echo_title" android:key="echo" android:defaultValue="false" android:summaryOn="@string/echo_on" android:summaryOff="@string/echo_off" />
+</PreferenceScreen>

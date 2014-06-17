@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item type="id" name="microphone_image">false</item>
+    <item type="id" name="settings">false</item>
+    <item type="id" name="settings_comm">false</item>
+    <item type="id" name="settings_audio">false</item>
+    <item type="id" name="settings_reset_all">false</item>
+    <item type="id" name="settings_localip">false</item>
+    <item type="id" name="program_help">false</item>
+</resources>

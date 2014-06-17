@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="cast_types">
+        <item>广播</item>
+        <item>组播</item>
+        <item>单播</item>
+    </string-array>
+</resources>
