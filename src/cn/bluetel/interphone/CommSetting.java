@@ -1,7 +1,5 @@
 package cn.bluetel.interphone;
 
-import java.net.InetAddress;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -9,7 +7,6 @@ import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import cn.bluetel.interphone.R;
 
 /**
  * 设置对讲方式 : 单播 组播 广播

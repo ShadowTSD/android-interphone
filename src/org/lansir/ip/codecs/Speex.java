@@ -2,7 +2,7 @@ package org.lansir.ip.codecs;
 
 /**
  * 保持不变
- * @author org.lansir.
+ * @author org.lansir.ip
  */
 public class Speex {
 
