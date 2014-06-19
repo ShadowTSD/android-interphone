@@ -28,6 +28,8 @@ public class VoiceSender extends Thread{
 	private short[] mShortBuffer = new short[' '];
 	private byte[] mByteBuffer;
 	
+	private Object obj = new Object();
+	private boolean isSuspended;
 	private boolean isStopped;
 	
 	private void initAudioRecord() {
@@ -80,11 +82,7 @@ public class VoiceSender extends Thread{
 		super.run();
 		Log.i(TAG, "run() =====>>> Begin");
 		// Set Thread Priority
-		Process.setThreadPriority(-19);
-		// Useless
-		if(isStopped()) {
-			return;
-		}
+		Process.setThreadPriority(Process.THREAD_PRIORITY_URGENT_AUDIO);
 		
 		try {
 			// Initialize AudioRecord
@@ -119,9 +117,17 @@ public class VoiceSender extends Thread{
 				mAudioRecord.read(mByteBuffer, 0, 320);		
 			}
 			
-			if (isStopped()) {
-				break;
+			// 暂停当前线程
+			if(isSuspended) {
+				synchronized (obj) {
+					try {
+						obj.wait();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
 			}
+			
 			try {
 				mDatagramSocket.send(mPacket);
 			} catch (Exception e) {
@@ -134,11 +140,24 @@ public class VoiceSender extends Thread{
 		Log.i(TAG, "run() =====>>> End");
 	}
 	
-	public synchronized boolean isStopped() {
+	public boolean isSuspended() {
+		return isSuspended;
+	}
+	
+	public void setIsSuspended(boolean isSuspend) {
+		this.isSuspended = isSuspend;
+		if(!isSuspended) {
+			synchronized (obj) {
+				obj.notify();
+			}
+		}
+	}
+	
+	public boolean isStopped() {
 		return isStopped;
 	}
 	
-	public synchronized void setIsStopped(boolean isStop) {
+	public void setIsStopped(boolean isStop) {
 		this.isStopped = isStop;
 	}
 }

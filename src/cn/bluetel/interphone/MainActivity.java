@@ -11,6 +11,7 @@ import android.media.AudioManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -166,24 +167,71 @@ public class MainActivity extends Activity implements OnTouchListener {
 		Log.i(TAG, "onActivityResult()...");
 	}
 	
+	private void startSend() {
+		stopSend();
+		mVoiceSender = new VoiceSender();
+		mVoiceSender.start();
+		if(btnTalk != null) {
+			btnTalk.setBackgroundResource(R.drawable.microphone_p);
+		}
+	}
+	
+	private void stopSend() {
+		if(mVoiceSender != null) {
+			mVoiceSender.setIsStopped(true);
+			mVoiceSender = null;
+		}
+		if(btnTalk != null) {
+			btnTalk.setBackgroundResource(R.drawable.microphone_n);	
+		}
+	}
+	
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
 		switch (event.getAction()) {
 		case MotionEvent.ACTION_DOWN:
-			btnTalk.setBackgroundResource(R.drawable.microphone_p);
-			if(mVoiceSender != null) {
-				mVoiceSender.setIsStopped(true);
-			}
-			mVoiceSender = new VoiceSender();
-			mVoiceSender.start();
+			startSend();
 			break;
 		case MotionEvent.ACTION_UP:
-			btnTalk.setBackgroundResource(R.drawable.microphone_n);
-			if(mVoiceSender != null) {
-				mVoiceSender.setIsStopped(true);
-			}
+			stopSend();
 			break;
 		}
 		return true;
+	}
+	
+	long waitTime = 2000;
+	long touchTime = 0;
+	@Override
+	public void onBackPressed() {
+		long currentTime = System.currentTimeMillis();
+		if ((currentTime - touchTime) >= waitTime) {
+			Toast.makeText(this, "再按一次退出", Toast.LENGTH_SHORT).show();
+			touchTime = currentTime;
+		} else {
+			finish();
+		}
+	}
+	
+	boolean hasStartedByKey = false;
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if(keyCode == KeyEvent.KEYCODE_VOLUME_UP || keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
+			if(!hasStartedByKey) {
+				startSend();
+				hasStartedByKey = true;
+			}
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
+	}
+	
+	@Override
+	public boolean onKeyUp(int keyCode, KeyEvent event) {
+		if(keyCode == KeyEvent.KEYCODE_VOLUME_UP || keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
+			stopSend();
+			hasStartedByKey = false;
+			return true;
+		}
+		return super.onKeyUp(keyCode, event);
 	}
 }

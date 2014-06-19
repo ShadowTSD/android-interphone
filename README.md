@@ -1,3 +1,3 @@
 android-interphone
 =============================
-![image](https://github.com/zhugg/android-interphone/blob/master/screen-shot.jpg)
+![Sample image](https://raw.github.com/zhugg/android-interphone/master/screen-shot.jpg)

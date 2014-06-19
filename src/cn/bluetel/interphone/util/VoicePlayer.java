@@ -25,17 +25,23 @@ public class VoicePlayer extends Thread {
 	private InetAddress mInetAddress;
 	private AudioTrack mAudioTrack;
 	
-	private boolean isStopped;
-	private boolean isPaused;
-	
 	private short[] shortBuffer = new short[' '];
 	private byte[] byteBuffer;
+	
+	private Object obj = new Object();
+	private boolean isSuspended;
+	private boolean isStopped;
 	
 	public void initAudioTrack() {
 		mAudioTrack = new AudioTrack(AudioManager.STREAM_MUSIC, 44100, 2, AudioFormat.ENCODING_PCM_16BIT, /*Config.AUDIO_TRACK_BUFFER*/24576, AudioTrack.MODE_STREAM);
 		mAudioTrack.play();
 	}
 
+	/**
+	 * 其实这里只需要初始化个组播MultiSocket就可以了<p>
+	 * 因为：组播可以接收所有广播了.
+	 * @throws Exception
+	 */
 	private void initSocket() throws Exception{
 		switch (CommSetting.getCastType()) {
 		case 0: // broadcat
@@ -81,24 +87,13 @@ public class VoicePlayer extends Thread {
 		}
 	}
 	
-	private boolean isStopped() {
-		return isStopped;
-	}
-	
-	private boolean isPaused() {
-		return isPaused;
-	}
-	
 	@Override
 	public void run() {
 		super.run();
 		Log.i("Player", "Player run()...Start");
 		// 
-		Process.setThreadPriority(-19);
-		// 
-		if(isStopped()) {
-			return;
-		}
+		Process.setThreadPriority(Process.THREAD_PRIORITY_URGENT_AUDIO);
+		
 		// 初始化AudioTrack
 		initAudioTrack();
 		try {
@@ -122,12 +117,19 @@ public class VoicePlayer extends Thread {
 		
 		while(!isStopped()) {
 			try {
-				// 暂停
-				if(isPaused()) {
-					continue;
+				mDatagramSocket.receive(mPacket);	// IOException
+				
+				// 暂停线程
+				if(isSuspended) {
+					synchronized (obj) {
+						try {
+							obj.wait();
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+					}
 				}
 				
-				mDatagramSocket.receive(mPacket);	// IOException
 				if(!AudioSetting.isEcho() && VoiceFilter.isInFilterList(mPacket.getAddress().getHostAddress())) {
 					Log.i("Player", "该段语音过滤掉了");
 					continue;
@@ -152,13 +154,27 @@ public class VoicePlayer extends Thread {
 		Log.i("Player", "Player run()...End");
 	}
 	
-	public synchronized void setIsPaused(boolean isPausePlay) {
-		isPaused = isPausePlay;
+	public boolean isStopped() {
+		return isStopped;
 	}
 	
-	public synchronized void setIsStopped() {
+	public void setIsStopped() {
 		isStopped = true;
 		// Socket异常退出
 		releaseSocket();
+	}
+	
+	public boolean isSuspended() {
+		return isSuspended;
+	}
+	
+	public void setIsSuspended(boolean isSuspend) {
+		this.isSuspended = isSuspend;
+		if(!isSuspended) {
+			synchronized (obj) {
+				// 恢复线程
+				obj.notify();
+			}
+		}
 	}
 }
